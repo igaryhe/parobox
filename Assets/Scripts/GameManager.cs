@@ -6,19 +6,37 @@ using UnityEngine.InputSystem;
 public class GameManager : Singleton<GameManager>
 {
 
+    // 关卡编号
     public int level;
+    // 背景 Prefab
     public GameObject boardPrefab;
     
+    // 用于保存关卡状态的二维数组
     [HideInInspector] public char[][] board;
+    // 关卡边长
     [HideInInspector] public int size;
-    [HideInInspector] public Vector2Int pos;
+    // 用于保存角色位置的变量
+    [HideInInspector] public Vector2Int playerPos;
+    // 用于保存递归方块位置的变量
+    [HideInInspector] public Vector2Int recursivePos;
+    // 用于保存箱子位置的变量
+    [HideInInspector] public Vector2Int boxPos;
+    // 移动事件
     [HideInInspector] public MoveEvent movement = new MoveEvent();
-    
-    private Vector2Int _entranceDir;
-    private Vector2Int _entrancePos;
-    [HideInInspector] public Vector2Int recPos;
 
+    // 箱子的胜利条件
+    public Vector2Int boxGoal;
+    // 玩家胜利条件
+    public Vector2Int playerGoal;
+    
+    // 入口方向
+    private Vector2Int _entranceDir;
+    // 入口位置
+    private Vector2Int _entrancePos;
+
+    // 命令栈
     private readonly Stack<Command> _commands = new Stack<Command>();
+    // 关卡文件路径前缀
     private const string Dir = "Assets/Levels/";
 
     protected override void Awake()
@@ -41,14 +59,17 @@ public class GameManager : Singleton<GameManager>
                 switch (board[i][j])
                 {
                     case 'p':
-                        pos = curPos;
+                        playerPos = curPos;
+                        break;
+                    case 'b':
+                        boxPos = curPos;
                         break;
                     case 'e':
                         _entrancePos = curPos;
                         board[i][j] = '.';
                         break;
                     case 'o':
-                        recPos = curPos;
+                        recursivePos = curPos;
                         break;
                 }
             }
@@ -60,7 +81,7 @@ public class GameManager : Singleton<GameManager>
         var b = Instantiate(boardPrefab, new Vector3(0, size, 0),
             quaternion.identity);
         b.transform.localScale = new Vector3(size, size, 1);
-        Camera.main.transform.position = new Vector3(recPos.x + 0.5f, size - (recPos.y + 0.5f), -10);
+        Camera.main.transform.position = new Vector3(recursivePos.x + 0.5f, size - (recursivePos.y + 0.5f), -10);
     }
     
     public void OnMove(InputAction.CallbackContext ctx)
@@ -91,11 +112,12 @@ public class GameManager : Singleton<GameManager>
     
     private void TryMove(Vector2Int direction)
     {
-        var count = TryPush(pos, direction);
+        var count = TryPush(playerPos, direction);
         if (count < 0) return;
         var move = new MoveCommand(direction, count);
         move.Execute();
         _commands.Push(move);
+        if (IsFinished()) Debug.Log("Win!");
     }
 
     private int TryPush(Vector2Int current, Vector2Int direction)
@@ -113,18 +135,18 @@ public class GameManager : Singleton<GameManager>
     public Vector2Int NextPos(Vector2Int current, Vector2Int direction)
     {
         if (current == _entrancePos && direction == _entranceDir)
-            return recPos + _entranceDir;
-        if (current == recPos + _entranceDir && direction == -_entranceDir)
+            return recursivePos + _entranceDir;
+        if (current == recursivePos + _entranceDir && direction == -_entranceDir)
             return _entrancePos;
         return current + direction;
     }
 
     public Vector2Int NextNPos(Vector2Int current, Vector2Int direction, int n)
     {
-        var pos = current;
+        var p = current;
         for (int i = 0; i != n; i++)
-            pos = NextPos(pos, direction);
-        return pos;
+            p = NextPos(p, direction);
+        return p;
     }
     
     private static Vector2Int CharToVec2(char side)
@@ -140,5 +162,10 @@ public class GameManager : Singleton<GameManager>
             default:
                 return Vector2Int.down;
         }
+    }
+
+    private bool IsFinished()
+    {
+        return playerPos == playerGoal && boxPos == boxGoal;
     }
 }

@@ -13,6 +13,8 @@ public class MoveBox : MonoBehaviour
     {
         if (current != pos) return;
         pos += distance;
+        if (gameObject.CompareTag("Box")) 
+            GameManager.Instance.boxPos = pos;
         var scale = transform.lossyScale;
         var position = transform.position;
         position += new Vector3(distance.x * scale.x, -distance.y * scale.y, 0);

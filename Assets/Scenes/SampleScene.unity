@@ -251,12 +251,12 @@ MonoBehaviour:
   level: 1
   boardPrefab: {fileID: 4807831434890293567, guid: 1c03e76af1da0b249966ed476ba9bb85,
     type: 3}
-  width: 0
-  height: 0
-  pos: {x: 0, y: 0}
-  entranceDir: {x: 0, y: 0}
-  entrancePos: {x: 0, y: 0}
-  recPos: {x: 0, y: 0}
+  size: 0
+  playerPos: {x: 0, y: 0}
+  recursivePos: {x: 0, y: 0}
+  boxPos: {x: 0, y: 0}
+  boxGoal: {x: 1, y: 5}
+  playerGoal: {x: 1, y: 1}
 --- !u!114 &1894126082
 MonoBehaviour:
   m_ObjectHideFlags: 0

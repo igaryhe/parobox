@@ -99,7 +99,10 @@ MonoBehaviour:
   wall: {fileID: 1582726978123866409, guid: bc9d5ccecab55304ebbab43ec08f1067, type: 3}
   board: {fileID: 4807831434890293567}
   player: {fileID: 187335970377454011, guid: 6867faa5301c1c84c848a898c60fe5a6, type: 3}
-  block: {fileID: 1428539468191725535, guid: 9914d036334ead44698589e5547ebe5c, type: 3}
+  box: {fileID: 1428539468191725535, guid: 9914d036334ead44698589e5547ebe5c, type: 3}
+  playerGoal: {fileID: 3758832556722553861, guid: 66b4964a721dc03449d846a30f0ad127,
+    type: 3}
+  boxGoal: {fileID: 1631298113613039383, guid: f1a20e137e193f74fb664b6cadaadb87, type: 3}
 --- !u!114 &-5245877751191574840
 MonoBehaviour:
   m_ObjectHideFlags: 0

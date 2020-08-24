@@ -5,7 +5,9 @@ public class Board : MonoBehaviour
     public GameObject wall;
     public GameObject board;
     public GameObject player;
-    public GameObject block;
+    public GameObject box;
+    public GameObject playerGoal;
+    public GameObject boxGoal;
 
     private void Start()
     {
@@ -41,11 +43,23 @@ public class Board : MonoBehaviour
                     p.transform.parent = transform;
                     break;
                 case 'b':
-                    var b = Instantiate(block, pos, Quaternion.identity);
+                    var b = Instantiate(box, pos, Quaternion.identity);
                     b.GetComponent<MoveBox>().pos = new Vector2Int(x, y);
                     b.transform.localScale = newScale;
                     b.transform.parent = transform;
                     break;
+            }
+
+            if (new Vector2Int(x, y) == GameManager.Instance.boxGoal)
+            {
+                var g = Instantiate(boxGoal, pos, Quaternion.identity);
+                g.transform.localScale = newScale;
+                g.transform.parent = transform;
+            } else if (new Vector2Int(x, y) == GameManager.Instance.playerGoal)
+            {
+                var g = Instantiate(playerGoal, pos, Quaternion.identity);
+                g.transform.localScale = newScale;
+                g.transform.parent = transform;
             }
         }
     }

@@ -194,5 +194,5 @@ sysinfo.txt
 InitTestScene*.unity.meta
 InitTestScene*.unity
 
-
+.idea
 # End of https://www.toptal.com/developers/gitignore/api/unity,rider,jetbrains+iml
